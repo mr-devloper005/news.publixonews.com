@@ -1,44 +1,21 @@
-'use client'
-
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowUpRight, Mail } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
-import { globalContent } from '@/editable/content/global.content'
-import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
+
+const columns = [
+  { title: 'Explore', links: [['Home','/'],['Search','/search']] },
+  { title: 'Resources', links: [['About','/about'],['Contact','/contact'],['Publisher access','/login']] },
+]
 
 export function EditableFooter() {
-  const year = new Date().getFullYear()
-  const { session, logout } = useEditableLocalAuthSession()
-
-  return (
-    <footer className="border-t-8 border-[var(--slot4-accent)] bg-black text-white">
-      <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:px-10 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_.7fr_.7fr]">
-          <div>
-            <Link href="/" className="editorial-brand text-5xl font-black text-[var(--slot4-accent)] sm:text-6xl">{SITE_CONFIG.name}</Link>
-            <p className="mt-6 max-w-xl text-sm leading-7 text-white/62">{globalContent.footer?.description || SITE_CONFIG.description}</p>
-            <form action="/signup" className="mt-8 flex max-w-xl border border-white/35">
-              <input name="email" type="email" placeholder="Email for newsroom updates" className="min-w-0 flex-1 bg-transparent px-4 py-4 text-sm outline-none placeholder:text-white/40" />
-              <button className="bg-[var(--slot4-accent)] px-5 text-xs font-black uppercase tracking-[.14em]">Subscribe</button>
-            </form>
-          </div>
-          <div>
-            <h3 className="border-b border-white/25 pb-3 text-[10px] font-black uppercase tracking-[.22em] text-white/55">Explore</h3>
-            <div className="mt-4 grid gap-3">
-              <Link href="/search" className="group inline-flex items-center justify-between text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Archive<ArrowRight className="h-4 w-4" /></Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="border-b border-white/25 pb-3 text-[10px] font-black uppercase tracking-[.22em] text-white/55">Publication</h3>
-            <div className="mt-4 grid gap-3">
-              <Link href="/about" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">About</Link>
-              <Link href="/contact" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Contact</Link>
-              {session ? <><Link href="/create" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Publish</Link><button onClick={logout} className="text-left text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Logout</button></> : <><Link href="/login" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Log in</Link><Link href="/signup" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Subscribe</Link></>}
-            </div>
-          </div>
-        </div>
+  return <footer className="bg-[#173f67] text-white">
+    <div className="mx-auto max-w-[1420px] px-5 py-16 sm:px-8 lg:px-12 lg:py-20">
+      <div className="grid gap-12 border-b border-white/20 pb-14 lg:grid-cols-[1.25fr_1fr]">
+        <div><Link href="/" className="editorial-brand text-4xl font-bold sm:text-5xl">{SITE_CONFIG.name}</Link><p className="mt-5 max-w-lg text-base leading-8 text-white/68">Clear, connected media coverage for people who publish, distribute, and follow the stories shaping their world.</p></div>
+        <form action="/signup" className="self-end"><label className="text-xs font-extrabold uppercase tracking-[.2em] text-[#ffd150]">The daily briefing</label><div className="mt-3 flex overflow-hidden rounded-lg bg-white"><Mail className="ml-4 mt-4 h-5 w-5 text-[#173f67]"/><input name="email" type="email" placeholder="Your email address" className="min-w-0 flex-1 px-3 py-4 text-sm text-[#173f67] outline-none"/><button className="bg-[#458b73] px-5 text-sm font-bold">Subscribe</button></div></form>
       </div>
-      <div className="border-t border-white/20 px-4 py-5 text-center text-[10px] font-black uppercase tracking-[.18em] text-white/45">© {year} {SITE_CONFIG.name}. Independent media and public information.</div>
-    </footer>
-  )
+      <div className="grid gap-10 py-14 sm:grid-cols-3">{columns.map((column) => <div key={column.title}><h3 className="text-xs font-extrabold uppercase tracking-[.18em] text-[#ffd150]">{column.title}</h3><div className="mt-5 grid gap-3">{column.links.map(([label,href]) => <Link key={label} href={href} className="text-sm text-white/72 transition hover:text-white">{label}</Link>)}</div></div>)}<div><h3 className="text-xs font-extrabold uppercase tracking-[.18em] text-[#ffd150]">Connect</h3><Link href="/contact" className="mt-5 inline-flex items-center gap-2 text-sm font-bold">Start a conversation <ArrowUpRight className="h-4 w-4"/></Link></div></div>
+      <div className="flex flex-col gap-3 border-t border-white/20 pt-6 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between"><p>© {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.</p><p>Independent media distribution, thoughtfully presented.</p></div>
+    </div>
+  </footer>
 }
